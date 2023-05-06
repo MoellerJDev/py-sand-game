@@ -13,55 +13,73 @@ def place_particles(grid, x, y, particle_type):
             if 0 <= new_y < len(grid) and 0 <= new_x < len(grid[0]):
                 grid[new_y][new_x] = particle_type(new_x, new_y)
 
+
+
 class Tools:
     @staticmethod
-    def handle_events(grid, cursor):
+    def handle_events(grid, cursor, placing_particle):
         running = True
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = event.pos
-                x, y = x // settings.CELL_SIZE, y // settings.CELL_SIZE
 
-                # Check if the cursor is clicked
-                if cursor.is_clicked(x, y):
-                    cursor.x = x * settings.CELL_SIZE  # Update cursor position
-                    cursor.y = y * settings.CELL_SIZE
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    x, y = x // settings.CELL_SIZE, y // settings.CELL_SIZE
 
-                    # Handle different cursor actions
-                    if cursor.x == 0:
-                        # Action for the first cursor
-                        pass
-                    elif cursor.x == cursor.size:
-                        # Action for the second cursor
-                        pass
-                    elif cursor.x == cursor.size * 2:
-                        # Action for the third cursor
-                        pass
-                    # Add more cursor actions as needed
+                    if cursor.is_clicked(x, y):
+                        cursor.x = x * settings.CELL_SIZE
+                        cursor.y = y * settings.CELL_SIZE
 
-                else:
-                    # Handle other mouse click events (placing elements)
-                    if event.button == 1:  # Left mouse button
-                        place_particles(grid, x, y, Sand)
-                    elif event.button == 3:  # Right mouse button
-                        place_particles(grid, x, y, Water)
-                    elif event.button == 2:  # Middle mouse button
-                        place_particles(grid, x, y, Fire)
-                    elif event.button == 4:  # Fourth mouse button
-                        place_particles(grid, x, y, Stone)  # Place a stone
+                        if cursor.x == 0:
+                            # Action for the first cursor
+                            pass
+                        elif cursor.x == cursor.size:
+                            # Action for the second cursor
+                            pass
+                        elif cursor.x == cursor.size * 2:
+                            # Action for the third cursor
+                            pass
+                        # Add more cursor actions as needed
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w and cursor.y > 0:  # Move up
-                    cursor.y -= 1
-                elif event.key == pygame.K_a and cursor.x > 0:  # Move left
-                    cursor.x -= 1
-                elif event.key == pygame.K_s and cursor.y < settings.GRID_HEIGHT - 1:  # Move down
-                    cursor.y += 1
-                elif event.key == pygame.K_d and cursor.x < settings.GRID_WIDTH - 1:  # Move right
-                    cursor.x += 1
-                elif event.key == pygame.K_SPACE:  # Place element
-                    grid[cursor.y // settings.CELL_SIZE][cursor.x // settings.CELL_SIZE] = Sand(cursor.x // settings.CELL_SIZE, cursor.y // settings.CELL_SIZE)
+                    else:
+                        particle_type = None
+
+                        if event.button == 1:  # Left mouse button
+                            particle_type = Sand
+                        elif event.button == 3:  # Right mouse button
+                            particle_type = Water
+                        elif event.button == 2:  # Middle mouse button
+                            particle_type = Fire
+                        elif event.button == 4:  # Fourth mouse button
+                            particle_type = Stone
+
+                        if particle_type is not None:
+                            x, y = x // settings.CELL_SIZE, y // settings.CELL_SIZE
+                            placing_particle = particle_type(x, y)
+                            grid[y][x] = placing_particle
+
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    placing_particle = None
+
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_w and cursor.y > 0:  # Move up
+                        cursor.y -= 1
+                    elif event.key == pygame.K_a and cursor.x > 0:  # Move left
+                        cursor.x -= 1
+                    elif event.key == pygame.K_s and cursor.y < settings.GRID_HEIGHT - 1:  # Move down
+                        cursor.y += 1
+                    elif event.key == pygame.K_d and cursor.x < settings.GRID_WIDTH - 1:  # Move right
+                        cursor.x += 1
+                    elif event.key == pygame.K_SPACE:  # Place element
+                        if placing_particle is not None:
+                            x, y = cursor.x // settings.CELL_SIZE, cursor.y // settings.CELL_SIZE
+                            grid[y][x] = placing_particle
+
+            if placing_particle is not None:
+                x, y = cursor.x // settings.CELL_SIZE, cursor.y // settings.CELL_SIZE
+                grid[y][x] = placing_particle
 
         return running
+

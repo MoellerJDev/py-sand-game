@@ -49,23 +49,28 @@ def main():
 
     screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
-    grid = [[None for _ in range(settings.GRID_WIDTH)] for _ in range(settings.GRID_HEIGHT)]
-
-    cursor = Cursor(settings.CURSOR_SIZE)
-    tick_counter = 0
-
-    clock = pygame.time.Clock()
-    FPS_LIMIT = 60  # Maximum frames per second
-
     running = True
-    while running:
-        running = Tools.handle_events(grid, cursor)
-        update_grid(grid)
-        draw_grid(screen, grid, cursor, tick_counter)
-        tick_counter += 1
-        pygame.display.flip()
+    grid = [[None for _ in range(settings.GRID_WIDTH)] for _ in range(settings.GRID_HEIGHT)]
+    cursor = Cursor(settings.CURSOR_SIZE)  # Create a cursor instance
+    placing_particle = None
 
-        clock.tick(FPS_LIMIT)  # Limit the frames per second
+    while running:
+        running = Tools.handle_events(grid, cursor, placing_particle)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        screen.fill((0, 0, 0))
+        cursor.draw(screen)
+
+        for row in grid:
+            for element in row:
+                if element is not None:
+                    element.update(grid)
+                    element.draw(screen)
+
+        pygame.display.flip()
 
     pygame.quit()
 
