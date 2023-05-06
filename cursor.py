@@ -12,3 +12,9 @@ class Cursor:
 
     def is_clicked(self, x, y):
         return self.x <= x < self.x + self.size and self.y <= y < self.y + self.size
+
+    def decrease_size(self):
+        self.size -= 1 if self.size > 1 else 0
+
+    def increase_size(self):
+        self.size += 1

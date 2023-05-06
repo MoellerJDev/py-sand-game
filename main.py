@@ -22,13 +22,6 @@ def update_grid(grid):
 def draw_grid(screen, grid, cursor, tick_counter):
     screen.fill((0, 0, 0))
 
-    # Draw the cursors
-    for i, cursor_pos in enumerate(settings.CURSOR_POSITIONS):
-        cursor_x = cursor_pos * cursor.size
-        cursor_y = 0
-        cursor.draw(screen)  # Update this line
-
-
     # Draw the elements in the grid
     for y, row in enumerate(grid):
         for x, element in enumerate(row):
@@ -44,6 +37,7 @@ def draw_grid(screen, grid, cursor, tick_counter):
     pygame.display.flip()
 
 
+
 def main():
     pygame.init()
 
@@ -51,7 +45,7 @@ def main():
 
     grid = [[None for _ in range(settings.GRID_WIDTH)] for _ in range(settings.GRID_HEIGHT)]
 
-    cursor = Cursor(settings.CURSOR_SIZE)
+    cursor = [Cursor(settings.CURSOR_SIZE)]  # Wrap cursor in a list to pass by reference
     tick_counter = 0
 
     clock = pygame.time.Clock()
