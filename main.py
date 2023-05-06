@@ -22,12 +22,20 @@ def update_grid(grid):
 def draw_grid(screen, grid, cursor, tick_counter):
     screen.fill((0, 0, 0))
 
-    # Draw the elements in the grid
+    usable_width = settings.SCREEN_WIDTH
+    usable_height = settings.SCREEN_HEIGHT
+
+    cell_width = usable_width // settings.GRID_WIDTH
+    cell_height = usable_height // settings.GRID_HEIGHT
+
     for y, row in enumerate(grid):
         for x, element in enumerate(row):
             if element is not None:
                 element.update(grid)
-                element.draw(screen, x * settings.CELL_SIZE, y * settings.CELL_SIZE, settings.CELL_SIZE)
+                element.draw(screen, x * cell_width, y * cell_height, cell_width)
+
+    # Draw the cursor
+    cursor[0].draw(screen)
 
     # Draw the tick counter
     font = pygame.font.SysFont(None, 24)
@@ -35,6 +43,7 @@ def draw_grid(screen, grid, cursor, tick_counter):
     screen.blit(text, (10, 10))
 
     pygame.display.flip()
+
 
 
 
