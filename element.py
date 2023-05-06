@@ -7,8 +7,8 @@ class Element:
         self.y = y
         self.color = (255, 255, 255)  # Default color is white
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, (self.x * settings.GRID_SIZE, self.y * settings.GRID_SIZE, settings.GRID_SIZE, settings.GRID_SIZE))
+    def draw(self, screen, x, y, size):
+        pygame.draw.rect(screen, self.color, (x, y, size, size))
 
     def update(self, grid):
         pass  # Default behavior is to do nothing
