@@ -10,3 +10,7 @@ CELL_SIZE=10
 
 # FPS
 FPS_LIMIT = 60  # Maximum frames per second
+
+# Cursor settings
+CURSOR_POSITIONS = [SCREEN_WIDTH // 4, SCREEN_WIDTH // 2, 3 * SCREEN_WIDTH // 4]
+CURSOR_SIZE = 20  # Example cursor size in pixels

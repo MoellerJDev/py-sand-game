@@ -1,11 +1,14 @@
 import pygame
-import settings
 
 class Cursor:
-    def __init__(self):
-        self.x = settings.GRID_WIDTH // 2
-        self.y = settings.GRID_HEIGHT // 2
+    def __init__(self, size):
+        self.x = 0
+        self.y = 0
         self.color = (255, 255, 255)  # White color
+        self.size = size
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, (self.x * 10, self.y * 10, 10, 10))
+        pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size))
+
+    def is_clicked(self, x, y):
+        return self.x <= x < self.x + self.size and self.y <= y < self.y + self.size
